@@ -22,11 +22,29 @@ textarea{min-height:100px;resize:vertical}
 button{border:0;border-radius:12px;padding:15px 22px;font-weight:bold;cursor:pointer}
 .generate{width:100%;margin-top:25px;background:linear-gradient(90deg,#7047ff,#bd54e9);color:white;font-size:17px}
 .player{margin-top:25px;padding:20px;background:#0d0c1b;border-radius:14px}
-.visualizer{height:65px;display:flex;align-items:center;justify-content:center;gap:5px}
-.visualizer i{display:block;width:5px;height:20px;border-radius:5px;background:#a879ff;animation:wave .8s infinite alternate}
-.visualizer i:nth-child(2n){animation-delay:.3s}
-.visualizer i:nth-child(3n){animation-delay:.5s}
-@keyframes wave{to{height:55px}}
+..visualizer{
+height:90px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:5px;
+overflow:hidden;
+}
+.visualizer i{
+display:block;
+width:5px;
+height:20px;
+border-radius:8px;
+background:linear-gradient(to top,#6545ff,#00d9ff);
+animation:wave .6s infinite alternate ease-in-out;
+}
+.visualizer i:nth-child(2n){animation-delay:.2s}
+.visualizer i:nth-child(3n){animation-delay:.4s}
+.visualizer i:nth-child(4n){animation-delay:.1s}
+@keyframes wave{
+from{height:10px}
+to{height:75px}
+}
 footer{text-align:center;color:#777;padding:35px}
 </style>
 </head>
