@@ -7,70 +7,80 @@
 <title>AI Music Studio Pro</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0c0b16;color:white;font-family:Arial,sans-serif}
-header{padding:22px;background:#171429;border-bottom:1px solid #383052}
-.logo{font-size:23px;font-weight:bold;color:#b99aff}
-.logo span{color:white}
-main{max-width:850px;margin:35px auto;padding:18px}
-h1{font-size:32px}
-p{color:#b8b4c8;line-height:1.6}
-.panel{background:#191629;padding:22px;border:1px solid #383052;border-radius:16px;margin-top:22px}
-label{display:block;margin:16px 0 8px}
-input,textarea,select{width:100%;padding:14px;border-radius:9px;border:1px solid #48405e;background:#100e1c;color:white;font-size:15px}
+body{margin:0;background:#090914;color:white;font-family:Arial,sans-serif}
+header{padding:22px 7%;border-bottom:1px solid #28243d;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:22px;font-weight:bold;color:#b99aff}
+.logo span{color:#fff}
+main{max-width:950px;margin:45px auto;padding:20px}
+.hero{text-align:center;margin-bottom:35px}
+h1{font-size:38px;margin-bottom:10px}
+.hero p{color:#aaa}
+.panel{background:#151426;border:1px solid #30294b;border-radius:20px;padding:25px}
+label{display:block;margin:18px 0 9px;color:#d8ceff}
+input,select,textarea{width:100%;padding:14px;border-radius:10px;background:#0c0b19;color:white;border:1px solid #40375d;font-size:15px}
 textarea{min-height:100px;resize:vertical}
-button{background:#8b5cf6;color:white;border:0;border-radius:9px;padding:14px 20px;font-size:15px;font-weight:bold;cursor:pointer}
-button:hover{background:#7542db}
-button:disabled{opacity:.5}
-.primary{width:100%;margin-top:20px}
-.player{margin-top:22px}
-audio{width:100%}
-.note{font-size:13px;color:#aaa4bb}
-footer{text-align:center;padding:30px;color:#888}
+button{border:0;border-radius:12px;padding:15px 22px;font-weight:bold;cursor:pointer}
+.generate{width:100%;margin-top:25px;background:linear-gradient(90deg,#7047ff,#bd54e9);color:white;font-size:17px}
+.player{margin-top:25px;padding:20px;background:#0d0c1b;border-radius:14px}
+.visualizer{height:65px;display:flex;align-items:center;justify-content:center;gap:5px}
+.visualizer i{display:block;width:5px;height:20px;border-radius:5px;background:#a879ff;animation:wave .8s infinite alternate}
+.visualizer i:nth-child(2n){animation-delay:.3s}
+.visualizer i:nth-child(3n){animation-delay:.5s}
+@keyframes wave{to{height:55px}}
+footer{text-align:center;color:#777;padding:35px}
 </style>
 </head>
 <body>
 <header>
-<div class="logo">♫ AI MUSIC <span>STUDIO PRO</span></div>
+<div class="logo">AI <span>MUSIC STUDIO PRO</span></div>
+<div>🎵 Create Your Music</div>
 </header>
 <main>
-<h1>Buat Musik Impianmu 🎵</h1>
-<p>Studio musik AI untuk membuat musik original dan mengembangkan kreativitasmu.</p>
-
+<div class="hero">
+<h1>Create Music with AI</h1>
+<p>Turn your imagination into beautiful music.</p>
+</div>
 <div class="panel">
-<h2>Music Generator</h2>
-<label>Judul Musik</label>
-<input id="title" placeholder="Contoh: My Dream">
-
-<label>Deskripsikan Musik</label>
-<textarea id="prompt" placeholder="Contoh: Musik pop emosional, piano lembut, vokal wanita..."></textarea>
-
-<label>Genre Musik</label>
+<label>Song Title</label>
+<input id="title" placeholder="Enter your song title">
+<label>Music Description</label>
+<textarea id="prompt" placeholder="Describe the music you want to create..."></textarea>
+<label>Music Genre</label>
 <select id="genre">
-<option>Pop</option>
-<option>EDM</option>
-<option>Rock</option>
-<option>Lo-Fi</option>
-<option>Cinematic</option>
-<option>Jazz</option>
-<option>Classical</option>
+<option>Pop</option><option>Rock</option><option>R&B</option>
+<option>Hip-Hop</option><option>EDM</option><option>Jazz</option>
+<option>Lo-fi</option><option>Classical</option><option>Country</option>
 </select>
-
-<label>Jenis Musik</label>
-<select id="type">
-<option>Dengan Vokal</option>
+<label>Mood</label>
+<select id="mood">
+<option>Happy</option><option>Romantic</option><option>Sad</option>
+<option>Relaxing</option><option>Epic</option><option>Energetic</option>
+</select>
+<label>Vocal Type</label>
+<select id="vocal">
+<option>Male Vocals</option><option>Female Vocals</option>
 <option>Instrumental</option>
 </select>
-
-<button class="primary" id="generate">♫ GENERATE MUSIC</button>
-<p class="note" id="status">Mesin AI belum dihubungkan. Generator akan diaktifkan pada tahap berikutnya.</p>
+<button class="generate" onclick="generateMusic()">✨ GENERATE MUSIC</button>
+<div class="player">
+<strong id="track">Your music will appear here</strong>
+<div class="visualizer" id="visualizer">
+<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
 </div>
-
-<div class="panel player">
-<h2>Music Player</h2>
-<p>Musik yang berhasil dibuat akan muncul di sini.</p>
-<audio controls></audio>
+<audio id="audio" controls style="width:100%"></audio>
+<p id="status" style="color:#b99aff">Ready to create music</p>
+</div>
 </div>
 </main>
-<footer>AI Music Studio Pro © 2026</footer>
+<footer>AI MUSIC STUDIO PRO · Create Your Own Sound</footer>
+<script>
+function generateMusic(){
+const title=document.getElementById('title').value;
+const prompt=document.getElementById('prompt').value;
+if(!prompt.trim()){alert('Please describe your music first.');return;}
+document.getElementById('track').textContent=title||'My New Song';
+document.getElementById('status').textContent='Music generation engine is not connected yet.';
+}
+</script>
 </body>
 </html>
