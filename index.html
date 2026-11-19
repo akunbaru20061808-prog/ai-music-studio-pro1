@@ -1,108 +1,289 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Music Studio Pro</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#090914;color:white;font-family:Arial,sans-serif}
-header{padding:22px 7%;border-bottom:1px solid #28243d;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.logo{font-size:22px;font-weight:bold;color:#b99aff}
-.logo span{color:white}
-main{max-width:950px;margin:45px auto;padding:20px}
-.hero{text-align:center;margin-bottom:35px}
-h1{font-size:38px;margin-bottom:10px}
-.hero p{color:#aaa}
-.panel{background:#151426;border:1px solid #30294b;border-radius:20px;padding:25px}
-label{display:block;margin:18px 0 9px;color:#d8ceff}
-input,select,textarea{width:100%;padding:14px;border-radius:10px;background:#0c0b19;color:white;border:1px solid #40375d;font-size:15px}
-textarea{min-height:100px;resize:vertical}
-button{border:0;border-radius:12px;padding:15px 22px;font-weight:bold;cursor:pointer}
-.generate{width:100%;margin-top:25px;background:linear-gradient(90deg,#7047ff,#bd54e9);color:white;font-size:17px}
-.player{margin-top:25px;padding:20px;background:#0d0c1b;border-radius:14px}
-.visualizer{height:90px;display:flex;align-items:center;justify-content:center;gap:5px;overflow:hidden}
-.visualizer i{display:block;width:5px;height:20px;border-radius:8px;background:linear-gradient(to top,#6545ff,#00d9ff);animation:wave .6s infinite alternate ease-in-out}
-.visualizer i:nth-child(2n){animation-delay:.2s}
-.visualizer i:nth-child(3n){animation-delay:.4s}
-@keyframes wave{to{height:75px}}
-audio{margin-top:12px}
-footer{text-align:center;color:#777;padding:35px}
-@media(max-width:600px){h1{font-size:29px}main{margin:20px auto;padding:14px}.panel{padding:18px}}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #090914;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  padding: 22px 7%;
+  border-bottom: 1px solid #28243d;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #b99aff;
+}
+
+.logo span {
+  color: white;
+}
+
+main {
+  max-width: 950px;
+  margin: 45px auto;
+  padding: 20px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+h1 {
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #aaa;
+}
+
+.panel {
+  background: #151426;
+  border: 1px solid #30294b;
+  border-radius: 20px;
+  padding: 25px;
+}
+
+label {
+  display: block;
+  margin: 18px 0 9px;
+  color: #d8ceff;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  background: #0c0b19;
+  color: white;
+  border: 1px solid #40375d;
+  font-size: 15px;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 15px 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.generate {
+  width: 100%;
+  margin-top: 25px;
+  background: linear-gradient(90deg,#7047ff,#bd54e9);
+  color: white;
+  font-size: 17px;
+}
+
+.generate:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.player {
+  margin-top: 25px;
+  padding: 20px;
+  background: #0d0c1b;
+  border-radius: 14px;
+}
+
+.visualizer {
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  overflow: hidden;
+}
+
+.visualizer i {
+  display: block;
+  width: 5px;
+  height: 20px;
+  border-radius: 8px;
+  background: linear-gradient(to top,#6545ff,#00d9ff);
+  animation: wave .6s infinite alternate ease-in-out;
+}
+
+.visualizer i:nth-child(2n) {
+  animation-delay: .2s;
+}
+
+.visualizer i:nth-child(3n) {
+  animation-delay: .4s;
+}
+
+@keyframes wave {
+  to { height: 75px; }
+}
+
+audio {
+  margin-top: 12px;
+}
+
+.download {
+  display: none;
+  margin-top: 15px;
+  color: #c6aaff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+footer {
+  text-align: center;
+  color: #777;
+  padding: 35px;
+}
+
+@media(max-width:600px) {
+  h1 { font-size: 29px; }
+  main { margin: 20px auto; padding: 14px; }
+  .panel { padding: 18px; }
+}
 </style>
 </head>
-<body>
-<header>
-<div class="logo">AI <span>MUSIC STUDIO PRO</span></div>
-<div>🎵 Create Your Music</div>
-</header>
-<main>
-<div class="hero">
-<h1>Create Music with AI</h1>
-<p>Turn your imagination into beautiful music.</p>
-</div>
-<div class="panel">
-<label>Song Title</label>
-<input id="title" placeholder="Enter your song title">
-<label>Music Description</label>
-<textarea id="prompt" placeholder="Describe the music you want to create..."></textarea>
-<label>Music Genre</label>
-<select id="genre">
-<option>Pop</option><option>Rock</option><option>R&B</option>
-<option>Hip-Hop</option><option>EDM</option><option>Jazz</option>
-<option>Lo-fi</option><option>Classical</option><option>Country</option>
-</select>
-<label>Mood</label>
-<select id="mood">
-<option>Happy</option><option>Romantic</option><option>Sad</option>
-<option>Relaxing</option><option>Epic</option><option>Energetic</option>
-</select>
-<label>Vocal Type</label>
-<select id="vocal">
-<option>Male Vocals</option>
-<option>Female Vocals</option>
-<option>Instrumental</option>
-</select>
-<button class="generate" onclick="generateMusic()">✨ GENERATE MUSIC</button>
-<div class="player">
-<strong id="track">Your music will appear here</strong>
-<div class="visualizer" id="visualizer">
-<i></i><i></i><i></i><i></i><i></i><i></i>
-<i></i><i></i><i></i><i></i><i></i><i></i>
-</div>
-<audio id="audio" controls style="width:100%"></audio>
-<p id="status" style="color:#b99aff">Ready to create music</p>
-</div>
-</div>
-</main>
-<footer>AI MUSIC STUDIO PRO · Create Your Own Sound</footer>
 
+<body>
+
+<header>
+  <div class="logo">AI <span>MUSIC STUDIO PRO</span></div>
+  <div>🎵 Create Your Music</div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>Create Music with AI</h1>
+    <p>Turn your imagination into beautiful music.</p>
+  </div>
+
+  <div class="panel">
+
+    <label>Song Title</label>
+    <input id="title" placeholder="Enter your song title">
+
+    <label>Music Description</label>
+    <textarea id="prompt" placeholder="Describe the music you want to create..."></textarea>
+
+    <label>Music Genre</label>
+    <select id="genre">
+      <option>Pop</option>
+      <option>Rock</option>
+      <option>R&B</option>
+      <option>Hip-Hop</option>
+      <option>EDM</option>
+      <option>Jazz</option>
+      <option>Lo-fi</option>
+      <option>Classical</option>
+      <option>Country</option>
+    </select>
+
+    <label>Mood</label>
+    <select id="mood">
+      <option>Happy</option>
+      <option>Romantic</option>
+      <option>Sad</option>
+      <option>Relaxing</option>
+      <option>Epic</option>
+      <option>Energetic</option>
+    </select>
+
+    <label>Vocal Type</label>
+    <select id="vocal">
+      <option>Male Vocals</option>
+      <option>Female Vocals</option>
+      <option>Instrumental</option>
+    </select>
+
+    <button class="generate" id="generateButton">
+      ✨ GENERATE MUSIC
+    </button>
+
+    <div class="player">
+      <strong id="track">Your music will appear here</strong>
+
+      <div class="visualizer">
+        <i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+
+      <audio id="audio" controls style="width:100%"></audio>
+
+      <a id="download" class="download" download="AI-Music.mp3">
+        ⬇ Download Music
+      </a>
+
+      <p id="status" style="color:#b99aff">
+        Ready to create music
+      </p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  AI MUSIC STUDIO PRO · Create Your Own Sound
+</footer>
+
+<script>
 const API = "https://3a2df9953e837925e2.gradio.live";
+
+const button = document.getElementById("generateButton");
+const statusText = document.getElementById("status");
+const audio = document.getElementById("audio");
+const download = document.getElementById("download");
+
+button.addEventListener("click", generateMusic);
 
 async function generateMusic() {
   const title = document.getElementById("title").value || "My New Song";
-  const prompt = document.getElementById("prompt").value;
+  const prompt = document.getElementById("prompt").value.trim();
   const genre = document.getElementById("genre").value;
   const mood = document.getElementById("mood").value;
   const vocal = document.getElementById("vocal").value;
 
-  const status = document.getElementById("status");
-  const track = document.getElementById("track");
-  const audio = document.getElementById("audio");
-
-  if (!prompt.trim()) {
+  if (!prompt) {
     alert("Please describe your music first.");
     return;
   }
 
-  status.textContent = "Connecting to ACE-Step...";
-  track.textContent = title;
+  button.disabled = true;
+  statusText.textContent = "Connecting to ACE-Step...";
+  document.getElementById("track").textContent = title;
   audio.removeAttribute("src");
+  download.style.display = "none";
 
   try {
     const response = await fetch(API + "/release_task", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         sample_mode: true,
         sample_query: `${prompt}, ${genre}, ${mood}, ${vocal}`,
@@ -113,36 +294,52 @@ async function generateMusic() {
     });
 
     const result = await response.json();
+
     if (!response.ok || !result.data?.task_id) {
-      throw new Error(result.error || "Task creation failed");
+      throw new Error(result.error || "Could not create music task");
     }
 
     const taskId = result.data.task_id;
-    status.textContent = "Generating music...";
+
+    statusText.textContent = "Generating music...";
 
     for (let i = 0; i < 180; i++) {
       await new Promise(resolve => setTimeout(resolve, 5000));
 
       const check = await fetch(API + "/query_result", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({task_id_list: [taskId]})
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          task_id_list: [taskId]
+        })
       });
 
       const data = await check.json();
-      if (!check.ok) throw new Error("Query failed");
+
+      if (!check.ok) {
+        throw new Error("Failed to check music result");
+      }
 
       const item = data.data?.[0];
 
       if (item?.status === 1) {
         const files = JSON.parse(item.result);
+
         if (!files.length || !files[0].file) {
-          throw new Error("Audio not found");
+          throw new Error("Audio file not found");
         }
 
-        audio.src = new URL(files[0].file, API).href;
+        const audioUrl = new URL(files[0].file, API).href;
+
+        audio.src = audioUrl;
         audio.load();
-        status.textContent = "Music ready!";
+
+        download.href = audioUrl;
+        download.style.display = "inline-block";
+
+        statusText.textContent = "Music ready!";
         return;
       }
 
@@ -150,14 +347,18 @@ async function generateMusic() {
         throw new Error("Music generation failed");
       }
 
-      status.textContent = "Creating your music...";
+      statusText.textContent = "Creating your music...";
     }
 
     throw new Error("Generation timed out");
 
   } catch (error) {
-    status.textContent = "Error: " + error.message;
+    statusText.textContent = "Error: " + error.message;
+  } finally {
+    button.disabled = false;
   }
 }
+</script>
+
 </body>
 </html>
