@@ -78,16 +78,85 @@ footer{text-align:center;color:#777;padding:35px}
 </main>
 <footer>AI MUSIC STUDIO PRO · Create Your Own Sound</footer>
 <script>
-function generateMusic(){
-const prompt=document.getElementById("prompt").value;
-if(!prompt.trim()){
-alert("Please describe your music first.");
-return;
-}
-document.getElementById("track").textContent=
-document.getElementById("title").value||"My New Song";
-document.getElementById("status").textContent=
-"Music generation engine is not connected yet.";
+const API = "https://3a2df9953e837925e2.gradio.live";
+
+async function generateMusic() {
+  const title = document.getElementById("title").value || "My New Song";
+  const prompt = document.getElementById("prompt").value;
+  const genre = document.getElementById("genre").value;
+  const mood = document.getElementById("mood").value;
+  const vocal = document.getElementById("vocal").value;
+  const status = document.getElementById("status");
+  const track = document.getElementById("track");
+  const audio = document.getElementById("audio");
+
+  if (!prompt.trim()) {
+    alert("Please describe your music first.");
+    return;
+  }
+
+  status.textContent = "Sending request...";
+  track.textContent = title;
+  audio.removeAttribute("src");
+
+  try {
+    const response = await fetch(API + "/release_task", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        sample_mode: true,
+        sample_query: `${prompt}, ${genre}, ${mood}, ${vocal}`,
+        thinking: true,
+        audio_duration: 60,
+        batch_size: 1
+      })
+    });
+
+    const result = await response.json();
+    if (!response.ok || !result.data?.task_id) {
+      throw new Error(result.error || "Task could not be created");
+    }
+
+    const taskId = result.data.task_id;
+    status.textContent = "Generating music...";
+
+    for (let i = 0; i < 180; i++) {
+      await new Promise(resolve => setTimeout(resolve, 5000));
+
+      const check = await fetch(API + "/query_result", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({task_id_list: [taskId]})
+      });
+
+      const data = await check.json();
+      if (!check.ok) throw new Error("Query failed");
+
+      const item = data.data?.[0];
+
+      if (item?.status === 1) {
+        const files = JSON.parse(item.result);
+        if (!files.length || !files[0].file) {
+          throw new Error("Audio file not found");
+        }
+
+        audio.src = new URL(files[0].file, API).href;
+        status.textContent = "Music ready!";
+        return;
+      }
+
+      if (item?.status === 2) {
+        throw new Error("Music generation failed");
+      }
+
+      status.textContent = "Creating your music...";
+    }
+
+    throw new Error("Generation timed out. Please try again.");
+
+  } catch (error) {
+    status.textContent = "Error: " + error.message;
+  }
 }
 </script>
 </body>
