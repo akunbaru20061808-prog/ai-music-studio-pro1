@@ -1,82 +1,16 @@
-
 <script>
-const API = "https://3a2df9953e837925e2.gradio.live";
-
-async function generateMusic() {
-  const title = document.getElementById("title").value || "My New Song";
+function generateMusic() {
   const prompt = document.getElementById("prompt").value;
-  const genre = document.getElementById("genre").value;
-  const mood = document.getElementById("mood").value;
-  const vocal = document.getElementById("vocal").value;
-  const status = document.getElementById("status");
-  const track = document.getElementById("track");
-  const audio = document.getElementById("audio");
 
   if (!prompt.trim()) {
     alert("Please describe your music first.");
     return;
   }
 
-  try {
-    status.textContent = "Sending music request...";
-    track.textContent = title;
-    audio.removeAttribute("src");
+  document.getElementById("track").textContent =
+    document.getElementById("title").value || "My New Song";
 
-    const response = await fetch(API + "/release_task", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        prompt: `${prompt}, ${genre}, ${mood}, ${vocal}`,
-        thinking: true,
-        audio_format: "mp3",
-        audio_duration: 60,
-        batch_size: 1
-      })
-    });
-
-    if (!response.ok) throw new Error("API request failed");
-
-    const result = await response.json();
-    const taskId = result.data.task_id;
-
-    if (!taskId) throw new Error("Task ID not received");
-
-    status.textContent = "Creating your music...";
-
-    while (true) {
-      await new Promise(resolve => setTimeout(resolve, 5000));
-
-      const check = await fetch(API + "/query_result", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({task_id_list: [taskId]})
-      });
-
-      const data = await check.json();
-      const item = data.data[0];
-
-      if (item.status === 1) {
-        const files = JSON.parse(item.result);
-        const file = files[0].file;
-
-        audio.src = file.startsWith("http")
-          ? file
-          : API + file;
-
-        await audio.play();
-        status.textContent = "Music ready!";
-        break;
-      }
-
-      if (item.status === 2) {
-        throw new Error("Music generation failed");
-      }
-
-      status.textContent = "Generating music...";
-    }
-
-  } catch (error) {
-    status.textContent = "Error: " + error.message;
-  }
+  document.getElementById("status").textContent =
+    "ACE-Step connection is being repaired.";
 }
 </script>
